@@ -1,0 +1,11 @@
+<<[IGNORE_LINE:@:]>>
+<<[REMOVE:(:):/:*:,:]>>
+<<[REPLACE:PCINT;TO;INT:]>>
+<<[DEFS:PA#A:PB#B:PC#C:PD#D:PE#E:PF#F:PG#G:]>>
+<<[DEF_RANGE_START:0:]>>
+<<[DEF_RANGE_END:100:]>>
+<<[DEF_SYNTAX:#define:]>>
+<<[PREFIX::]>>
+<<[SUFFIX:_PIN:]>>
+<<[ORDERED_PREFIX:PIN_:]>>
+<<[ORDERED_SUFFIX::]>>

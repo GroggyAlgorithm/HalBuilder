@@ -1,0 +1,15 @@
+<<[IGNORE_LINE:@:]>>
+<<[REMOVE:(:):/:*:,:]>>
+<<[REPLACE:PCINT;TO;INT:]>>
+<<[DEF_SYNTAX:#define:]>>
+<<[DEF_RANGE_START:0:]>>
+<<[DEF_RANGE_END:100:]>>
+<<[REPLACE:(:):*:/:\:]>>
+<<[DEFS:PA#A:PB#B:PC#C:PD#D:PE#E:PF#F:PG#G:]>>
+<<[PREFIX::]>>
+<<[ORDERED_PREFIX:PIN_:]>>
+<<[SUFFIX:_PIN:]>>
+<<[CUSTOM_SECTION:
+"CHARCHS";
+:]>>
+<<[PERIPHERAL_DEF:ADC0;TO;ADC0_CHANNEL;AS;0:]>>
