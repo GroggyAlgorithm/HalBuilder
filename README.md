@@ -64,11 +64,15 @@ dotnet build -c Release
 
 ```
 
-Now you can either use MOVE the provided py folder fully or...
+Your builder.py Should always be one level above your python.exe folder
+
+If you use the File/Select Python functionality in the GUI, you can select the python.exe you want and it will automatically look for builder.py in the folder above this!
+
+If you dont...
+
+You can either use MOVE the provided py folder fully or...
 
 Within your Release folder, create a folder name 'py' 
-
-Copy the python source file into this folder
 
 In this folder, we also want to create a virtual enviroment
 
@@ -76,6 +80,8 @@ Example:
 ```
 py -m venv ./venv
 ```
+
+Copy the python source file into this folder
 
 Your final python path should be ..../py/venv/Scripts/python.exe.
 
@@ -245,6 +251,11 @@ PORT_WRITE                              Allows you to write to the whole output 
 
 
 CONFIGURE_PIN_INVERTED, CONFIGURE_PIN_INPUT_SENSE, PIN_CONTROL, DISABLE_PIN can only be used on appropriate devices.
+
+
+
+PIN(...)                               Allows you to pass in a literal (or macro) number that will convert to the defined pin values.
+Example: If by syntax has been defined for PIN_0 to be generated, using PIN(0) will create PIN_0
 
 ```
 
