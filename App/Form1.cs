@@ -8,8 +8,8 @@ namespace HalBuilder;
 public partial class Form1 : Form
 {
     
-    static readonly string pythonPath = Directory.GetCurrentDirectory() + "/py/venv/Scripts/python.exe";
-    static readonly string pythonCmd = Directory.GetCurrentDirectory() + "/py/venv/builder.py";
+    string pythonPath = Directory.GetCurrentDirectory() + "/py/venv/Scripts/python.exe";
+    string pythonCmd = Directory.GetCurrentDirectory() + "/py/venv/builder.py";
     
     /// <summary>
     /// The main display layout panel
@@ -644,7 +644,15 @@ public partial class Form1 : Form
                 start.FileName = Directory.GetCurrentDirectory() + "/py/venv/Scripts/python.exe ";
                 if(File.Exists(start.FileName) == false)
                 {
-                    MessageBox.Show("Could not find python\n", "):", MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    string outMsg = "Could not find python\n";
+                    outMsg += "python path: " + pythonPath;
+                    outMsg += "\ncmd: " + cmd;
+                    outMsg += "\nargs: " + args;
+                    outMsg += "\ndefinitions file: " + tbDefinitionsFile.Text;
+                    outMsg += "\nconfig files: " + tbConfigDefinitionsFile.Text;
+                    outMsg += "\noutput file: " + tbOutputFile.Text;
+
+                    MessageBox.Show(outMsg + "\n", "):", MessageBoxButtons.OK,MessageBoxIcon.Error);
                     return 1;
                 }
             }
@@ -666,7 +674,15 @@ public partial class Form1 : Form
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Could not generate file\n"+ex.Message, "):",MessageBoxButtons.OK,MessageBoxIcon.Error);
+            string outMsg = "Could not generate file\n";
+            outMsg += "python path: " + pythonPath;
+            outMsg += "\ncmd: " + cmd;
+            outMsg += "\nargs: " + args;
+            outMsg += "\ndefinitions file: " + tbDefinitionsFile.Text;
+            outMsg += "\nconfig files: " + tbConfigDefinitionsFile.Text;
+            outMsg += "\noutput file: " + tbOutputFile.Text;
+
+            MessageBox.Show(outMsg + "\n"+ex.Message, "):", MessageBoxButtons.OK,MessageBoxIcon.Error);
             return 1;
         }
 
@@ -811,7 +827,12 @@ public partial class Form1 : Form
     void SelectFileEvent()
     {
         tbDefinitionsFile.Text = SelectFileDialog();
-        tbOutputFile.Text = (tbDefinitionsFile.Text.Split(".")).First() + ".h";
+
+        if(string.IsNullOrEmpty(tbOutputFile.Text) || string.IsNullOrWhiteSpace(tbOutputFile.Text)
+        || tbOutputFile.Text == "..." || tbOutputFile.Text == ".h")
+        {
+            tbOutputFile.Text = (tbDefinitionsFile.Text.Split(".")).First() + ".h";
+        }
     }
     void SelectConfigFileEvent()
     {
@@ -820,8 +841,9 @@ public partial class Form1 : Form
     void SaveFileEvent()
     {
         tbOutputFile.Text = SaveFileDialog();
-        tbOutputFile.Text = tbOutputFile.Text;
     }
+    
+    
     string SelectFileDialog(bool multiSelect = false, string titleText = "Select File")
     {
         string filePath = "";
@@ -938,12 +960,54 @@ public partial class Form1 : Form
 
         var activeAuthorName = new ToolStripMenuItem("");
         activeAuthorName.Enabled = false;
+        activeAuthorName.Text = authorName;
 
         void SetAuthorText()
         {
             activeAuthorName.Text = authorName;
         }
         
+        void SetPythonPath()
+        {
+            pythonPath = SelectFileDialog(false,"Select Python.exe");
+            try
+            {
+
+
+                if (File.Exists(pythonPath) && pythonPath.ToLower().Contains("python.exe"))
+                {
+                    var pythonParent = Directory.GetParent(pythonPath);
+                    var builderShouldBeHere = pythonParent.Parent;
+                    pythonCmd = "";
+                    foreach (var f in builderShouldBeHere.GetFiles())
+                    {
+                        if (f.Name == "builder.py")
+                        {
+                            pythonCmd = f.FullName;
+                        }
+                    }
+                    if (File.Exists(pythonCmd) == false)
+                    {
+                        string outMsg = "Could not find builder.py: " + pythonCmd + "\n\nPlease make sure it's in " + builderShouldBeHere;
+                        MessageBox.Show(outMsg + "\n", "):", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    string outMsg = "Could not find python: " + pythonPath + "\n\n";
+                    MessageBox.Show(outMsg + "\n", "):", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch(Exception ex)
+            {
+                string outMsg = "Something went wrong!\n"+ex;
+                MessageBox.Show(outMsg, "):", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        var pySelect = new ToolStripMenuItem("Select Python Path");
+        pySelect.Click += new EventHandler((_, _) => SetPythonPath());
+
         var setAuthorName = new ToolStripMenuItem("Set Author");
         setAuthorName.Click += new EventHandler((_, _) => OpenAuthorName());
         setAuthorName.Click += new EventHandler((_, _) => SetAuthorText());
@@ -966,6 +1030,7 @@ public partial class Form1 : Form
         }
         
         filemenuDropdown.DropDownItems.Add(setAuthorName);
+        filemenuDropdown.DropDownItems.Add(pySelect);
         filemenuDropdown.DropDownItems.Add(activeAuthorName);
         filemenuDropdown.DropDownItems.Add(configDropDown);
         filemenuDropdown.DropDownItems.Add(exitMenuItem);
