@@ -23,7 +23,7 @@ Quick Example for setting up the parse document, including this in the file will
 <<[IGNORE_LINE:@@@:]>>               Lines begining with @@@ will be ignored
 <<[REMOVE:(:):/:*:]>>                Removes these characters when generating
 @@@<<[REPLACE:PCINT;TO;PC_INT_:]>>   Reformats these pins when building BUT WAIT, IT STARTS WITH THE IGNORE SEQUENCE!
-<<[PIN:PA#A:PB#B:PC#C:PD#D:]>>       Defines standard formatting for pins and their final outputs
+<<[DEFS:PA#A:PB#B:PC#C:PD#D:]>>       Defines standard formatting for final outputs
 
 
 <<[ADD_TOP_NEXT:#if defined(__AVR_ATmega1284__) || defined(__AVR_ATmega1284P__):]>> This will add the phrase to the top but at the end of the header, in this case an ifdef gaurd for the atmega controller
