@@ -33,8 +33,9 @@
 #define _TOKENIZE3(x,y,z)		x##y##z
 #endif
 
-
-
+#if !defined(_PIN_MAKER)
+#define _PIN_MAKER(num)       _TOKENIZE(PIN_, num)
+#endif
 
 
 
@@ -284,6 +285,8 @@
 ///Writes a port to the value passed Takes the literal letter(PORTA would be A) and the value.
 #define PORT_WRITE(port_letter, val)			GET_PORT(port_letter) = val
 
+///Tokenizes a pin number into the appropriate ordered pin format. Example: Passing in 0 would create PIN_0 if the prefix is "PIN_" and the suffix is blank, which should ultimately be defined as PORT_LETTER, BIT_POSITION
+#define PIN(...)            					_PIN_MAKER(__VA_ARGS__) 
 
 #if defined(__AVR)
 //From microchip

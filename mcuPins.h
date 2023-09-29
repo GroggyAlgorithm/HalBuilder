@@ -15,22 +15,6 @@
 #include "mcuPinChecks.h"
 #include "mcuPinUtils.h"
 
-#if !defined(ORDERED_PREFIX)
-#define ORDERED_PREFIX PIN_
-#endif
-
-#if !defined(ORDERED_SUFFIX)
-#define ORDERED_SUFFIX 
-#endif
-
-#if !defined(_HAL_PIN)
-#define _HAL_PIN(num)       _TOKENIZE3(ORDERED_PREFIX, num, ORDERED_SUFFIX) 
-#endif
-
-#if !defined(PIN)
-///Tokenizes a pin number into the appropriate ordered pin format. Example: Passing in 0 would create PIN_0 if the prefix is "PIN_" and the suffix is blank, which should ultimately be defined as PORT_LETTER, BIT_POSITION
-#define PIN(...)            _HAL_PIN(__VA_ARGS__) 
-#endif
 
 #ifndef GPIO_PIN_REG_TYPE
 #define GPIO_PIN_REG_TYPE unsigned char
