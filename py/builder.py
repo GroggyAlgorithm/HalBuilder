@@ -415,19 +415,6 @@ class HalBuilder(Builder):
                     reformattedText.append(section)
                 reformattedText.append("\n\n")
 
-                
-                if self.rangeEnd and (int)(self.rangeEnd) > 0 and self.rangeStart and (int)(self.rangeStart) >= 0:
-                    reformattedText += "\n\n//Pin Utils\n\n#define ORDERED_PREFIX " + self.orderedPrefix + "\n"
-                    reformattedText += "#define ORDERED_SUFFIX " + self.orderedSuffix + "\n"
-                    reformattedText += "#define _HAL_MAKER_TOKENIZER(a,b) a##b \n"
-                    reformattedText += "#define _HAL_MAKER_TOKENIZER3(a,b,c) a##b##c \n"
-                    reformattedText += "#define _HAL_PIN_V_3(a,b,c) _HAL_MAKER_TOKENIZER3(a, b, c) \n"
-                    reformattedText += "#define _HAL_PIN(num)       _HAL_PIN_V_3(ORDERED_PREFIX, num, ORDERED_SUFFIX) \n"
-                    reformattedText += "\n///Tokenizes a pin number into the appropriate ordered pin format. Example: Passing in 0 would create PIN_0 if the prefix is \"PIN_\" and the suffix is blank, which should ultimately be defined as PORT_LETTER, BIT_POSITION\n"
-                    reformattedText += "#define PIN(...)            _HAL_PIN(__VA_ARGS__) \n\n\n"
-                    
-                
-
                 if self.fileFooter is not None:
                     reformattedText.append(self.fileFooter)
                 if self.outputFile is None:
