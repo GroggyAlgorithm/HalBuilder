@@ -78,16 +78,16 @@
 #if !defined(__PINS_NEED_CUSTOM_WRITE) || __PINS_NEED_CUSTOM_WRITE != 1
 
 ///Abstraction macro for variable argument pin high macros
-#define _PIN_HIGHV2(pL, ...)		__PIN_UTIL_TOKENIZE_REG_NAME(__PIN_UTIL_PREFIX_WRITE_REG, pL) |= VFUNC(_BUILDVALV, __VA_ARGS__)
+#define _PIN_HIGHV2(pL, ...)		__PIN_UTIL_TOKENIZE_REG_NAME(__PIN_UTIL_PREFIX_WRITE_REG, pL) |= VFUNC(_BUILD_MASK_V, __VA_ARGS__)
 
 ///Abstraction macro for variable argument pin low macros
-#define _PIN_LOWV2(pL, ...)			__PIN_UTIL_TOKENIZE_REG_NAME(__PIN_UTIL_PREFIX_WRITE_REG, pL) &= ~VFUNC(_BUILDVALV, __VA_ARGS__)
+#define _PIN_LOWV2(pL, ...)			__PIN_UTIL_TOKENIZE_REG_NAME(__PIN_UTIL_PREFIX_WRITE_REG, pL) &= ~VFUNC(_BUILD_MASK_V, __VA_ARGS__)
 
 ///Abstraction macro for variable argument pin input/output macros
-#define _PIN_DIR_HIGHV2(pL, ...)	__PIN_UTIL_TOKENIZE_REG_NAME(__PIN_UTIL_PREFIX_DIR_REG, pL) |= VFUNC(_BUILDVALV, __VA_ARGS__)
+#define _PIN_DIR_HIGHV2(pL, ...)	__PIN_UTIL_TOKENIZE_REG_NAME(__PIN_UTIL_PREFIX_DIR_REG, pL) |= VFUNC(_BUILD_MASK_V, __VA_ARGS__)
 
 ///Abstraction macro for variable argument pin input/output macros
-#define _PIN_DIR_LOWV2(pL, ...)		__PIN_UTIL_TOKENIZE_REG_NAME(__PIN_UTIL_PREFIX_DIR_REG, pL) &= ~(VFUNC(_BUILDVALV, __VA_ARGS__))
+#define _PIN_DIR_LOWV2(pL, ...)		__PIN_UTIL_TOKENIZE_REG_NAME(__PIN_UTIL_PREFIX_DIR_REG, pL) &= ~(VFUNC(_BUILD_MASK_V, __VA_ARGS__))
 
 ///Abstraction macro for port high macros
 #define _PORT_DIR_HIGH(pL)			__PIN_UTIL_TOKENIZE_REG_NAME(__PIN_UTIL_PREFIX_DIR_REG, pL) |= 0xFF
@@ -133,7 +133,7 @@
 #define _CLEAR_PORT_DIR(pL, pV)						__PIN_UTIL_TOKENIZE_REG_NAME(__PIN_UTIL_PREFIX_DIR_REG, pL) &= ~(pV)
 
 ///Abstraction for toggling a pin
-#define _PIN_TOGGLE(pL, ...)                        __PIN_UTIL_TOKENIZE_REG_NAME(__PIN_UTIL_PREFIX_WRITE_REG, pL) ^= VFUNC(_BUILDVALV, __VA_ARGS__)
+#define _PIN_TOGGLE(pL, ...)                        __PIN_UTIL_TOKENIZE_REG_NAME(__PIN_UTIL_PREFIX_WRITE_REG, pL) ^= VFUNC(_BUILD_MASK_V, __VA_ARGS__)
 
 
 
@@ -286,7 +286,11 @@
 #define PORT_WRITE(port_letter, val)			GET_PORT(port_letter) = val
 
 ///Tokenizes a pin number into the appropriate ordered pin format. Example: Passing in 0 would create PIN_0 if the prefix is "PIN_" and the suffix is blank, which should ultimately be defined as PORT_LETTER, BIT_POSITION
-#define PIN(...)            					_PIN_MAKER(__VA_ARGS__) 
+#define _PIN_ABSTRACTV2(pl, pn)					pl, pn
+#define _PIN_ABSTRACT(...)						_PIN_ABSTRACTV2(__VA_ARGS__)
+#define PIN(...)            					_PIN_ABSTRACT(_PIN_MAKER(__VA_ARGS__))
+
+
 
 #if defined(__AVR)
 //From microchip
